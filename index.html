@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>vocals</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body,
+      html {
+        height: 100%;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+      }
+
+      h1 {
+        position: absolute;
+        top: 49%;
+        width: 100%;
+        text-align: center;
+        color: #ff4081;
+        font-size: 3rem;
+        z-index: 2;
+      }
+
+      .popup {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #ffefd5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        z-index: 3;
+        animation: fadeOut 1s ease-out 5s forwards; /* Fade out after 5 seconds */
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          visibility: hidden;
+        }
+      }
+
+      .popup h1 {
+        font-size: 3rem;
+        color: #ff4081;
+        animation: bounce 1s infinite alternate;
+      }
+
+      @keyframes bounce {
+        to {
+          transform: translateY(-20px);
+        }
+      }
+
+      .confetti {
+        position: absolute;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 4;
+      }
+
+      .confetti div {
+        width: 10px;
+        height: 10px;
+        background: red;
+        position: absolute;
+        top: -10px;
+        animation: fall 5s linear infinite;
+      }
+
+      @keyframes fall {
+        0% {
+          transform: translateY(0);
+        }
+        100% {
+          transform: translateY(100vh);
+        }
+      }
+
+      .slideshow {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        display: none; /* Hide slideshow initially */
+      }
+
+      .slideshow img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none; /* Hide all images initially */
+      }
+
+      .slideshow img.active {
+        display: block; /* Show active image */
+      }
+
+      #audio-player {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Popup Animation -->
+    <div class="popup">
+      <h1>What About Us!</h1>
+    </div>
+
+    <!-- Confetti Animation (Optional) -->
+    <div class="confetti">
+      <div style="left: 20%; background: pink"></div>
+      <div style="left: 50%; background: yellow"></div>
+      <div style="left: 80%; background: green"></div>
+    </div>
+
+    <!-- Slideshow Section -->
+    <div class="slideshow">
+      <img src="img/img2.JPG" alt="Birthday Image 1" class="slide" />
+      <img src="img/img6.JPG" alt="Birthday Image 2" class="slide" />
+      <img src="img/img1.JPG" alt="Birthday Image 3" class="slide" />
+      <img src="img/img4.JPG" alt="Birthday Image 2" class="slide" />
+      <img src="img/img3.JPG" alt="Birthday Image 3" class="slide" />
+    </div>
+
+    <audio id="audio-player" autoplay>
+      <source src="Whabout Us.m4a" type="audio/mp4" />
+      Your browser does not support the audio element.
+    </audio>
+
+    <script>
+      // Confetti Logic (simple falling squares for demo)
+      function generateConfetti() {
+        const confettiContainer = document.querySelector(".confetti");
+        for (let i = 0; i < 100; i++) {
+          let confetti = document.createElement("div");
+          confetti.style.left = `${Math.random() * 100}vw`;
+          confetti.style.backgroundColor = `hsl(${
+            Math.random() * 360
+          }, 100%, 50%)`;
+          confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+          confettiContainer.appendChild(confetti);
+        }
+      }
+
+      generateConfetti();
+
+      // Slideshow Logic
+      function startSlideshow() {
+        const slides = document.querySelectorAll(".slide");
+        let currentSlide = 0;
+
+        function showSlide() {
+          slides.forEach((slide, index) => {
+            slide.classList.remove("active");
+          });
+          slides[currentSlide].classList.add("active");
+          currentSlide = (currentSlide + 1) % slides.length;
+        }
+
+        setInterval(showSlide, 3000); // Change image every 3 seconds
+        showSlide(); // Initialize the slideshow
+      }
+
+      // Hide Popup and Show Slideshow after 5 seconds
+      setTimeout(function () {
+        document.querySelector(".popup").style.display = "none";
+        document.querySelector(".confetti").style.display = "none";
+        document.querySelector(".slideshow").style.display = "block";
+
+        // Start slideshow after popup
+        startSlideshow();
+
+        // Play music
+        let audioPlayer = document.getElementById("audio-player");
+        audioPlayer.currentTime = 10; // Start at 10 seconds (optional)
+        audioPlayer.play();
+      }, 5000); // 5 seconds for the animation before switching to slideshow
+    </script>
+  </body>
+</html>
